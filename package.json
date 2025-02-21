@@ -1,0 +1,21 @@
+{
+  "name": "effect-rpc",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@effect/platform": "^0.77.2",
+    "@effect/platform-node": "^0.73.2",
+    "@effect/rpc": "^0.52.2",
+    "@effect/rpc-http": "^0.50.2",
+    "effect": "^3.13.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.5",
+    "typescript": "^5.7.3"
+  }
+}
