@@ -4,9 +4,10 @@
   "description": "",
   "private": true,
   "type": "module",
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "scripts": {
+    "server": "node --experimental-strip-types server.ts",
+    "client": "node --experimental-strip-types client.ts"
+  },
   "dependencies": {
     "@effect/platform": "^0.77.2",
     "@effect/platform-node": "^0.73.2",
