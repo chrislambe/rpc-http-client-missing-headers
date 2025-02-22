@@ -15,7 +15,10 @@ const makeClient = Effect.gen(function* () {
     HttpClient.filterStatusOk,
     HttpClient.mapRequest(
       HttpClientRequest.prependUrl("http://localhost:3000/rpc")
-    )
+    ),
+    HttpClient.mapRequest(
+      HttpClientRequest.setHeader("Authorization", "Bearer abc123")
+    ),
   );
   return RpcResolver.toClient(HttpRpcResolver.make<AppRouter>(client));
 });
@@ -32,13 +35,7 @@ const program = Effect.gen(function* () {
 
 program.pipe(
   Effect.provide(
-    FetchHttpClient.layer.pipe(
-      Layer.provide(
-        Layer.succeed(FetchHttpClient.RequestInit, {
-          headers: [["Authorization", "Bearer abc123"]],
-        })
-      )
-    )
+    FetchHttpClient.layer
   ),
   Effect.runPromise
 );
