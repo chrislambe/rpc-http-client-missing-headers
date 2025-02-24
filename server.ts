@@ -18,7 +18,7 @@ const HttpLive = HttpRouter.empty.pipe(
       HttpApp.appendPreResponseHandler((request, response) => {
         console.log("request (note headers)", request);
 
-        if (request.headers["Authorization"] !== "Bearer abc123") {
+        if (request.headers["authorization"] !== "Bearer abc123") {
           return Effect.succeed(HttpServerResponse.setStatus(response, 401));
         }
 

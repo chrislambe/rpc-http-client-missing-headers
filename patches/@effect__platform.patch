@@ -1,0 +1,63 @@
+diff --git a/dist/cjs/internal/fetchHttpClient.js b/dist/cjs/internal/fetchHttpClient.js
+index 9d77538680008195258457c705b07a85db367964..48dabc301814306c859357a85f58613a05b86c88 100644
+--- a/dist/cjs/internal/fetchHttpClient.js
++++ b/dist/cjs/internal/fetchHttpClient.js
+@@ -7,6 +7,7 @@ exports.requestInitTagKey = exports.layer = exports.fetchTagKey = void 0;
+ var Effect = _interopRequireWildcard(require("effect/Effect"));
+ var FiberRef = _interopRequireWildcard(require("effect/FiberRef"));
+ var Stream = _interopRequireWildcard(require("effect/Stream"));
++var Headers = _interopRequireWildcard(require("../Headers.js"));
+ var Error = _interopRequireWildcard(require("../HttpClientError.js"));
+ var client = _interopRequireWildcard(require("./httpClient.js"));
+ var internalResponse = _interopRequireWildcard(require("./httpClientResponse.js"));
+@@ -20,7 +21,7 @@ const fetch = /*#__PURE__*/client.make((request, url, signal, fiber) => {
+   const context = fiber.getFiberRef(FiberRef.currentContext);
+   const fetch = context.unsafeMap.get(fetchTagKey) ?? globalThis.fetch;
+   const options = context.unsafeMap.get(requestInitTagKey) ?? {};
+-  const headers = new globalThis.Headers(request.headers);
++  const headers = Headers.merge(request.headers, Headers.fromInput(options.headers));
+   const send = body => Effect.map(Effect.tryPromise({
+     try: () => fetch(url, {
+       ...options,
+diff --git a/dist/esm/internal/fetchHttpClient.js b/dist/esm/internal/fetchHttpClient.js
+index bf52198593732db92d979e5352105bf60dc406cb..450e7566be64a0c12be9c1e15f94dba4e3d67b8e 100644
+--- a/dist/esm/internal/fetchHttpClient.js
++++ b/dist/esm/internal/fetchHttpClient.js
+@@ -1,6 +1,7 @@
+ import * as Effect from "effect/Effect";
+ import * as FiberRef from "effect/FiberRef";
+ import * as Stream from "effect/Stream";
++import * as Headers from "../Headers.js";
+ import * as Error from "../HttpClientError.js";
+ import * as client from "./httpClient.js";
+ import * as internalResponse from "./httpClientResponse.js";
+@@ -12,7 +13,7 @@ const fetch = /*#__PURE__*/client.make((request, url, signal, fiber) => {
+   const context = fiber.getFiberRef(FiberRef.currentContext);
+   const fetch = context.unsafeMap.get(fetchTagKey) ?? globalThis.fetch;
+   const options = context.unsafeMap.get(requestInitTagKey) ?? {};
+-  const headers = new globalThis.Headers(request.headers);
++  const headers = Headers.merge(request.headers, Headers.fromInput(options.headers));
+   const send = body => Effect.map(Effect.tryPromise({
+     try: () => fetch(url, {
+       ...options,
+diff --git a/src/internal/fetchHttpClient.ts b/src/internal/fetchHttpClient.ts
+index 1438c3f51a64ef7e9f22c429aea4dbb62501a3bd..be4ba2a995a4f479749478fbbe488df1a558130a 100644
+--- a/src/internal/fetchHttpClient.ts
++++ b/src/internal/fetchHttpClient.ts
+@@ -1,6 +1,7 @@
+ import * as Effect from "effect/Effect"
+ import * as FiberRef from "effect/FiberRef"
+ import * as Stream from "effect/Stream"
++import * as Headers from "../Headers.js"
+ import type * as Client from "../HttpClient.js"
+ import * as Error from "../HttpClientError.js"
+ import * as client from "./httpClient.js"
+@@ -15,7 +16,7 @@ const fetch: Client.HttpClient = client.make((request, url, signal, fiber) => {
+   const context = fiber.getFiberRef(FiberRef.currentContext)
+   const fetch: typeof globalThis.fetch = context.unsafeMap.get(fetchTagKey) ?? globalThis.fetch
+   const options: RequestInit = context.unsafeMap.get(requestInitTagKey) ?? {}
+-  const headers = new globalThis.Headers(request.headers)
++  const headers = Headers.merge(request.headers, Headers.fromInput(options.headers))
+   const send = (body: BodyInit | undefined) =>
+     Effect.map(
+       Effect.tryPromise({
